@@ -5,53 +5,43 @@ include __DIR__.'/vendor/autoload.php';
 use Dotenv\Dotenv;
 use Discord\Discord;
 use Discord\Parts\Channel\Message;
+use App\Command;
 
 Dotenv::createImmutable(__DIR__)->load();
 
 define("PREFIX", $_ENV["PREFIX"]);
 
-function is(string $command, string $name): bool {
-    return str_starts_with($command, $name);
-}
-
-function crop(string $command, string $name): string {
-    return substr($command, strlen($name));
-}
+foreach (glob("commands/*.php") as $filename) require_once $filename;
+foreach (glob("listeners/*.php") as $filename) require_once $filename;
 
 try {
     $client = new Discord([
         'token' => $_ENV['TOKEN'],
     ]);
 
-    $client->on('ready', function ($discord) {
+    $client->on('ready', function (Discord $client) {
         echo "Bot is ready!", PHP_EOL;
 
         // Listen for messages.
-        $discord->on('message', function (Message $message) {
-            if($message->type != Message::TYPE_NORMAL)
-                return;
+        $client->on('message', function (Message $message, Discord $client) {
+            if($message->type != Message::TYPE_NORMAL) return null;
 
             if(str_starts_with($message->content, PREFIX)){
-                $cmd = substr($message->content, 1);
+                $without_prefix = substr($message->content, 1);
 
-                // Handle eval command
-                if(is($cmd, "eval")){
-                    if($message->author->id == "352176756922253321"){
-                        try {
-                            $result = eval(crop($cmd, "eval").';');
-
-                            if(is_null($result)){
-                                $message->channel->sendMessage("Done.");
-                            }else{
-                                $stringResult = strval($result);
-                                $message->channel->sendMessage("```php\n$stringResult\n```");
+                foreach(Command::$commands as $command){
+                    // Handle eval command
+                    if(str_starts_with($without_prefix, $command->name)){
+                        // Check owner
+                        if($command->ownerOnly){
+                            if($message->author->id != '352176756922253321') {
+                                return $message->channel->sendMessage("Nope.");
                             }
-                        }catch (ParseError $error){
-                            $errorMessage = $error->getMessage();
-                            $message->channel->sendMessage("```pbp\nParseError: $errorMessage\n```");
                         }
-                    }else{
-                        $message->channel->sendMessage("Nope.");
+
+                        $rest = substr($without_prefix, strlen($command->name));
+
+                        $command->run($message, $rest);
                     }
                 }
             }
