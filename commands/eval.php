@@ -6,7 +6,8 @@ new \App\Command([
     'ownerOnly' => true,
     'run' => function($message, $rest) {
         try {
-            $result = eval($rest.';');
+            $result = eval(trim($rest).';');
+            var_dump($result);
     
             if(is_null($result)){
                 $message->channel->sendMessage("Done.");

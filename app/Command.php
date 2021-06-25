@@ -11,7 +11,7 @@ class Command
     public $ownerOnly;
     public $run;
 
-    public function __construct($options)
+    public function __construct(array $options)
     {
         if(!isset($options['name']))
             throw new \Error("Missing name property on some Command");
