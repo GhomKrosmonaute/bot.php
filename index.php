@@ -34,14 +34,17 @@ try {
                     if(str_starts_with($without_prefix, $command->name)){
                         // Check owner
                         if($command->ownerOnly){
-                            if($message->author->id != '352176756922253321') {
+                            if($message->author->id != '780814951228244018') {
                                 return $message->channel->sendMessage("Nope.");
                             }
                         }
 
                         $rest = substr($without_prefix, strlen($command->name));
 
-                        $command->run($message, $rest);
+                        // Tkt c'est normal x)
+                        // Il demande en premier arg un obj puis les args de la fonction, donc le pourquoi du comment le voila.
+                        $command->run->call($message, $message, $rest);
+
                     }
                 }
             }

@@ -7,7 +7,7 @@ new \App\Command([
     'run' => function($message, $rest) {
         try {
             $result = eval($rest.';');
-
+    
             if(is_null($result)){
                 $message->channel->sendMessage("Done.");
             }else{
