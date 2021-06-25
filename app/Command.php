@@ -7,8 +7,10 @@ class Command
     public static $commands = [];
 
     public $name;
-    public $aliases;
+    public $description;
+    public $aliases = [];
     public $ownerOnly;
+
     public $run;
 
     public function __construct(array $options)
@@ -16,10 +18,14 @@ class Command
         if(!isset($options['name']))
             throw new \Error("Missing name property on some Command");
 
+        if(!isset($options['description']))
+            throw new \Error('Missing description property on some Command');
+
         if(!isset($options['run']))
             throw new \Error('Missing run property on "'.$options['name'].'" Command');
 
         $this->name = $options['name'];
+        $this->description = $options['description'];
         $this->run = $options['run'];
 
         if(isset($options['aliases'])) $this->aliases = $options['aliases'];

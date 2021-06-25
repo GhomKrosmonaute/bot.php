@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tools;
+namespace App\Namespaces;
 
 use Discord\Parts\Channel\Message;
 use Discord\Parts\Embed\Embed;
@@ -8,8 +8,8 @@ use Discord\Discord;
 
 class DefaultEmbed {
 
-    public $color = '2980b9';
-    public $embed;
+    public $color = '57F287';
+    public $result;
 
     public function __construct(Message $message, Discord $discord, array $options = [])
     {
@@ -30,7 +30,7 @@ class DefaultEmbed {
         if(isset($options['title']))
             $content['title'] = $options['title'];
 
-        $this->embed = new Embed($discord, $content, true);
-    }
+        $this->result = new Embed($discord, $content, true);
+    } 
 
 }
