@@ -2,6 +2,7 @@
 
 new \App\Command([
     'name' => 'eval',
+    'description' => 'Eval Command',
     'aliases' => ['run', 'test'],
     'ownerOnly' => true,
     'run' => function($message, $rest) {

@@ -20,7 +20,7 @@ try {
     $client->on('ready', function (Discord $client) {
         echo "Bot is ready!", PHP_EOL;
 
-        require_once 'loader.php';
+        require_once 'app/Handler.php';
         
     });
 
