@@ -4,11 +4,11 @@ namespace App;
 
 class Command
 {
-    public static array $commands = [];
+    public static $commands = [];
 
-    public string $name;
-    public ?array $aliases;
-    public ?bool $ownerOnly;
+    public $name;
+    public $aliases;
+    public $ownerOnly;
     public $run;
 
     public function __construct($options)
@@ -26,5 +26,7 @@ class Command
         if(isset($options['ownerOnly'])) $this->ownerOnly = $options['ownerOnly'];
 
         self::$commands[$options['name']] = $this;
+        
     }
+
 }
